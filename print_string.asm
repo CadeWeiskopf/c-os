@@ -12,15 +12,18 @@ print_string:
   jmp print_string
 
 done:
+  ; new line at end
+  mov al, 10
+  int 0x10
+  mov al, 13
+  int 0x10
+
   ret
 
 ;
 ; prints hex representation of data in dx
 ;
 print_hex:
-  mov bx, HELLO_MSG
-  call print_string
-
   mov si, dx
   mov cx, 4       ; will proccess 4 nibbles bc 16bits
   push 0          ; use to offset HEX_OUT
@@ -53,8 +56,10 @@ print_hex:
     mov bx, HEX_OUT
     call print_string
 
-    mov bx, GOODBYE_MSG
-    call print_string
-
     pop ax
     ret
+
+
+HEX_OUT:
+  db '0x0000', 0
+
