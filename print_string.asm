@@ -11,14 +11,14 @@ print_string:
   inc bx
   jmp print_string
 
-done:
-  ; new line at end
-  mov al, 10
-  int 0x10
-  mov al, 13
-  int 0x10
+  done:
+    ; new line at end
+    mov al, 10
+    int 0x10
+    mov al, 13
+    int 0x10
 
-  ret
+    ret
 
 ;
 ; prints hex representation of data in dx
@@ -63,3 +63,25 @@ print_hex:
 HEX_OUT:
   db '0x0000', 0
 
+VIDEO_MEMORY equ 0xb8000
+GREEN_ON_BLACK equ 0b0000_0010
+print_string_pm:
+  pusha
+  mov edx, VIDEO_MEMORY
+
+  print_string_pm_loop:
+    mov al, [ebx]
+    mov ah, GREEN_ON_BLACK 
+    mov [edx], ax             ; display current char
+
+    cmp al, 0
+    je print_string_pm_done
+
+    add ebx, 1                ; increment to next char in string
+    add edx, 2                ; move to next char cell in video mem
+
+    jmp print_string_pm_loop
+
+  print_string_pm_done:
+    popa
+    ret

@@ -3,7 +3,7 @@
 ;
 
 [org 0x7c00]    ; tell assembler where this code is loaded
-
+  
   mov [BOOT_DRIVE], dl  ; bios stores boot drive in dl, store for later
 
   mov bp, 0x8000        ; move stack out of the way
@@ -20,6 +20,9 @@
   mov dx, [0x9000 + 512]
   call print_hex
 
+  mov ebx, DEBUG_MSG
+  call print_string_pm
+
   jmp $       
 
 %include "print_string.asm"
@@ -28,6 +31,9 @@
 ; global variables
 BOOT_DRIVE:
   db 0
+
+DEBUG_MSG:
+  db 'Debug message!', 0
 
 ; padding 512 bytes and BIOS magic number 
 times 510-($-$$) db 0
