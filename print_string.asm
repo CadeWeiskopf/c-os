@@ -65,6 +65,7 @@ HEX_OUT:
 
 VIDEO_MEMORY equ 0xb8000
 GREEN_ON_BLACK equ 0b0000_0010
+[bits 32]
 print_string_pm:
   pusha
   mov edx, VIDEO_MEMORY
